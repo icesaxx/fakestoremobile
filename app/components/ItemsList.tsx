@@ -14,6 +14,7 @@ type Product = {
   title: string;
   price: number;
   image: string;
+  category: string;
 };
 
 const ItemsList = ({ item }: { item: Product }) => {

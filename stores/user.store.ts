@@ -1,9 +1,9 @@
 import { create } from "zustand";
 
-type User = {
-    iat: number;
+export type User = {
+    iat?: number;
     sub: string;
-    user: string;
+    user?: string;
     exp?: number;
 }
 

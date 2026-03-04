@@ -4,12 +4,13 @@ import { MD3DarkTheme, MD3LightTheme, PaperProvider } from "react-native-paper";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import {GestureHandlerRootView} from "react-native-gesture-handler";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import useUserStore from "@/stores/user.store";
+import useUserStore, { type User } from "@/stores/user.store";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Toaster } from 'sonner-native';
 import { decodeTokenSafely, isLocalSessionToken, isTokenExpired, parseStoredUser } from "@/lib/auth";
 import useThemeStore from "@/stores/theme.store";
 import { useColorScheme } from "react-native";
+import { StatusBar } from "expo-status-bar";
 
 export const unstable_settings = {
   initialRouteName: "/(tabs)",
@@ -46,7 +47,7 @@ const RouteGuard = ({ children }: { children: React.ReactNode }) => {
           return;
         }
 
-        hydrateSession(storedToken, localUser);
+        hydrateSession(storedToken, { ...localUser, sub: localUser.sub });
         setLoading(false);
         return;
       }
@@ -59,8 +60,11 @@ const RouteGuard = ({ children }: { children: React.ReactNode }) => {
         return;
       }
 
-      const hydratedUser = parseStoredUser(storedUser) ?? decodedFromToken;
-      hydrateSession(storedToken, hydratedUser);
+      const hydratedUser = parseStoredUser(storedUser);
+      const nextUser: User = hydratedUser?.sub
+        ? { ...hydratedUser, sub: hydratedUser.sub }
+        : { ...decodedFromToken, sub: decodedFromToken.sub };
+      hydrateSession(storedToken, nextUser);
       setLoading(false);
     };
 
@@ -104,6 +108,7 @@ export default function RootLayout() {
         <PaperProvider theme={paperTheme}>
           <SafeAreaProvider>
             <RouteGuard>
+              <StatusBar style={isDark ? "light" : "dark"} />
               <Stack>
                 <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
                 <Stack.Screen name="(auth)" options={{ headerShown: false }} />

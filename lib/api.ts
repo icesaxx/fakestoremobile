@@ -9,14 +9,9 @@ api.interceptors.request.use((config) => {
   const token = useUserStore.getState().token;
 
   if (token) {
-    if (config.headers instanceof AxiosHeaders) {
-      config.headers.set("Authorization", `Bearer ${token}`);
-    } else {
-      config.headers = {
-        ...(config.headers ?? {}),
-        Authorization: `Bearer ${token}`,
-      };
-    }
+    const headers = AxiosHeaders.from(config.headers ?? {});
+    headers.set("Authorization", `Bearer ${token}`);
+    config.headers = headers;
   }
 
   return config;
