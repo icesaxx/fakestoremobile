@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "rn-auth-app",
-    "slug": "rn-auth-app",
+    "name": "Fake Store",
+    "slug": "fake-store",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
-    "scheme": "rnauthapp",
+    "icon": "./assets/images/fakestorelogo.png",
+    "scheme": "fakestore",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
@@ -23,7 +23,7 @@
     },
     "web": {
       "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/images/fakestorelogo.png"
     },
     "plugins": [
       "expo-router",
